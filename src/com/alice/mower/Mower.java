@@ -3,7 +3,8 @@
  */
 package com.alice.mower;
 
-import com.alice.mower.environment.Coordinate;
+import java.util.List;
+
 import com.alice.mower.environment.Lawn;
 import com.alice.mower.environment.Position;
 
@@ -32,11 +33,17 @@ public final class Mower {
 		System.out.println("Mower built at " + currentPosition);
 	}
 
-	public boolean move() {
-		//v1 just move forward in current direction
-		Coordinate nextCoordinate = new Coordinate(currentPosition.getCoordinate().getAbscisse(), currentPosition.getCoordinate().getOrdonnée() +1);
-		if (lawn.exists(nextCoordinate)) {
-			currentPosition = new Position(nextCoordinate, currentPosition.getOrientation());
+	/**
+	 * 
+	 * @param movement
+	 * @return true if the move was possible, false if the mower could not move in the requested way.
+	 */
+	public boolean move(Movement movement) {
+		System.out.println("Moving " + movement);
+		Position nextPosition = MovementEngine.getPositionAfter(currentPosition, movement);
+		
+		if (lawn.exists(nextPosition.getCoordinate())) {
+			currentPosition = nextPosition;
 			System.out.println("Mower moved to " + currentPosition );
 			return true;
 		}
@@ -45,6 +52,16 @@ public final class Mower {
 
 	public Position getPosition() {
 		return currentPosition;
+	}
+
+	/**
+	 * Give the mower a sequence of moves to perform.
+	 * @param moves
+	 */
+	public void move(List<Movement> moves) {
+		for (Movement m: moves) {
+			move(m);
+		}
 	}
 
 }
