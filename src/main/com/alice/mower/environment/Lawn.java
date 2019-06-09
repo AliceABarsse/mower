@@ -6,24 +6,31 @@ package com.alice.mower.environment;
 /**
  * @author alicebarsse
  * 
- * The lawn is responsible for knowing grid boundaries.
- * Our lawn is a square grid.
+ *         The lawn is responsible for knowing grid boundaries. Our lawn may be
+ *         a square or a rectangle grid with lower left corner at coordinates
+ *         X=0, Y=0.
+ * 
+ *         The lawn dimension is defined by giving the coordinates of the upper
+ *         right corner.
  *
  */
 public final class Lawn {
-	
+
 	/**
-	 * Variable upper right corner coordinates. 
+	 * Variable upper right corner coordinates.
 	 */
 	private final Coordinate upperRightCoords;
-	
+
 	/**
 	 * Fixed lower left corner.
 	 */
-	public static final Coordinate LOWER_LEFT_COORDINATE = new Coordinate(0,0);
+	public static final Coordinate LOWER_LEFT_COORDINATE = new Coordinate(0, 0);
 
 	/**
-	 * @param upperLeftCoords Defining information
+	 * @param upperLeftCoords
+	 *            Dimension-defining information.Must not be null.
+	 * @throws IllegalArgumentException
+	 *             if the parameter is null
 	 */
 	public Lawn(Coordinate upperLeftCoords) {
 		if (upperLeftCoords == null) {
@@ -31,25 +38,30 @@ public final class Lawn {
 		}
 		this.upperRightCoords = upperLeftCoords;
 	}
-	
+
+	/**
+	 * 
+	 * @param coord
+	 *            A coordinate defining a spot on a plane
+	 * @return True if the given coordinate is on the lawn, false if not.
+	 */
 	public boolean exists(Coordinate coord) {
-		
-		if(coord == null) {
+
+		if (coord == null) {
 			return false;
 		}
-		//Is the Abscisse on the lawn? 
-		if (coord.getAbscisse() < LOWER_LEFT_COORDINATE.getAbscisse() 
-				|| coord.getAbscisse() > upperRightCoords.getAbscisse()) {
-			System.err.println("Coordinate is outside of lawn: " + coord);
+		if (coord.isGreaterThan(upperRightCoords)) {
+			System.err.println("Coordinate (" + coord
+					+ ") is outside of lawn upper or right-side bounds (lawn upper-right coordinate is "
+					+ upperRightCoords + ")");
 			return false;
 		}
-		//Is the Ordonnée on the lawn? 
-		if (coord.getOrdonnée() < LOWER_LEFT_COORDINATE.getOrdonnée() 
-				|| coord.getOrdonnée() > upperRightCoords.getOrdonnée()) {
-			System.err.println("Coordinate is outside of lawn: " + coord);
+		if (LOWER_LEFT_COORDINATE.isGreaterThan(coord)) {
+			System.err.println("Coordinate (" + coord
+					+ ") is outside of lawn lower or left-side bounds (lawn lower-left coordinate is "
+					+ LOWER_LEFT_COORDINATE + ")");
 			return false;
-		}		
+		}
 		return true;
 	}
 }
- 

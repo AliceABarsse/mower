@@ -5,60 +5,74 @@ package com.alice.mower.environment;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author alicebarsse
+ * 
+ *         Test class for Lawn {@link com.alice.mower.environment.Lawn}
  *
  */
 public class LawnTest {
 
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
+	private static final Coordinate DEFAULT_UPPER_RIGHT_CORNER = new Coordinate(5, 5);
 
 	/**
-	 * @throws java.lang.Exception
+	 * Test method for
+	 * {@link com.alice.mower.environment.Lawn#Lawn(Coordinate)}.
+	 * 
 	 */
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@After
-	public void tearDown() throws Exception {
-	}
-
 	@Test
 	public void newLawn() {
-		Coordinate upperLeftSquare = new Coordinate(5,5);
-		Lawn lawn = new Lawn(upperLeftSquare);
-		
+		Lawn lawn = new Lawn(DEFAULT_UPPER_RIGHT_CORNER);
+
 		assertNotNull(lawn);
-		assertTrue(lawn.exists(upperLeftSquare));
-		assertTrue(lawn.exists(new Coordinate(0, 0)));
-		assertFalse(lawn.exists(new Coordinate(upperLeftSquare.getAbscisse()+1, upperLeftSquare.getOrdonnée()+1)));
-		assertFalse(lawn.exists(new Coordinate(-1, -1)));
 	}
-	
-	@Test(expected=IllegalArgumentException.class)
+
+	/**
+	 * Test method for
+	 * {@link com.alice.mower.environment.Lawn#Lawn(Coordinate)}.
+	 * 
+	 */
+	@Test(expected = IllegalArgumentException.class)
 	public void nullParamNewLawn() {
 		new Lawn(null);
 	}
+
+	/**
+	 * Test method for
+	 * {@link com.alice.mower.environment.Lawn#exists(Coordinate)}
+	 */
+	@Test
+	public void existsNominal() {
+		Lawn lawn = new Lawn(DEFAULT_UPPER_RIGHT_CORNER);
+
+		assertTrue(lawn.exists(DEFAULT_UPPER_RIGHT_CORNER));
+		assertTrue(lawn.exists(new Coordinate(0, 0)));
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.alice.mower.environment.Lawn#exists(Coordinate)}
+	 */
+	@Test
+	public void existsNull() {
+		Lawn lawn = new Lawn(DEFAULT_UPPER_RIGHT_CORNER);
+
+		assertFalse(lawn.exists(null));
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.alice.mower.environment.Lawn#exists(Coordinate)}
+	 */
+	@Test
+	public void existsOutOfBounds() {
+		Lawn lawn = new Lawn(DEFAULT_UPPER_RIGHT_CORNER);
+
+		assertFalse(lawn
+				.exists(new Coordinate(DEFAULT_UPPER_RIGHT_CORNER.getX() + 1, DEFAULT_UPPER_RIGHT_CORNER.getY() + 1)));
+		assertFalse(lawn.exists(new Coordinate(-1, -1)));
+	}
+
 }

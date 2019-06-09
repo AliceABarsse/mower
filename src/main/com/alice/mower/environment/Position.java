@@ -11,9 +11,14 @@ public final class Position {
 
 	private final Coordinate coords;
 	private final Orientation orientation;
+
 	/**
 	 * @param coords
+	 *            Must not be null
 	 * @param orientation
+	 *            Must not be null
+	 * @throws IllegalArgumentException
+	 *             if either parameter is null.
 	 */
 	public Position(Coordinate coords, Orientation orientation) {
 		if (coords == null || orientation == null) {
@@ -22,10 +27,12 @@ public final class Position {
 		this.coords = coords;
 		this.orientation = orientation;
 	}
+
 	@Override
 	public String toString() {
 		return "Position [coords=" + coords + ", orientation=" + orientation + "]";
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -34,6 +41,7 @@ public final class Position {
 		result = prime * result + ((orientation == null) ? 0 : orientation.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -52,12 +60,23 @@ public final class Position {
 			return false;
 		return true;
 	}
+
 	public Coordinate getCoordinate() {
 		return coords;
 	}
+
 	public Orientation getOrientation() {
 		return orientation;
 	}
-	
-	
+
+	public String displayString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(coords.getX());
+		sb.append(" ");
+		sb.append(coords.getY());
+		sb.append(" ");
+		sb.append(orientation.name().charAt(0));
+		return sb.toString();
+	}
+
 }

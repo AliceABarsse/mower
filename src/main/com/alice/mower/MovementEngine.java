@@ -10,7 +10,7 @@ import com.alice.mower.environment.Position;
 /**
  * @author alicebarsse
  *
- *This class is responsible for how the mower moves.
+ *         This class is responsible for how the mower moves.
  */
 public final class MovementEngine {
 
@@ -18,15 +18,23 @@ public final class MovementEngine {
 	 * This constructor should not be called.
 	 */
 	private MovementEngine() {
-		
+
 	}
-	
+
+	/**
+	 * 
+	 * @param initialPosition
+	 *            Initial position. Must not be null
+	 * @param movement
+	 *            Requested movement. Must not be null
+	 * @return new position after performing the move.
+	 */
 	public static Position getPositionAfter(Position initialPosition, Movement movement) {
-		
+
 		if (movement == null || initialPosition == null) {
 			return initialPosition;
 		}
-		
+
 		switch (movement) {
 		case FORWARD:
 			return moveForward(initialPosition);
@@ -37,14 +45,14 @@ public final class MovementEngine {
 		default:
 			System.err.println("Unhandled movement: " + movement);
 		}
-		
 		return initialPosition;
-		
 	}
 
 	/**
 	 * Keep initial Coordinates, but change orientation to go right.
-	 * @param initialPosition. Must not be null.
+	 * 
+	 * @param initialPosition.
+	 *            Must not be null.
 	 * @return position after turning right.
 	 */
 	private static Position turnRight(Position initialPosition) {
@@ -53,7 +61,8 @@ public final class MovementEngine {
 
 	/**
 	 * 
-	 * @param initialPosition Must not be null.
+	 * @param initialPosition
+	 *            Must not be null.
 	 * @return position after turning left.
 	 */
 	private static Position turnLeft(Position initialPosition) {
@@ -61,30 +70,31 @@ public final class MovementEngine {
 	}
 
 	/**
-	 * @param initialPosition Must not be null.
-	 * @return
+	 * @param initialPosition
+	 *            Must not be null.
+	 * @return New position after moving forward.
 	 */
 	private static Position moveForward(Position initialPosition) {
 		Coordinate initialCoordinate = initialPosition.getCoordinate();
 		Coordinate newCoordinate = initialCoordinate;
 		final Orientation initialOrientation = initialPosition.getOrientation();
-		
+
 		switch (initialOrientation) {
 		case NORTH:
 			// increment y
-			newCoordinate = new Coordinate(initialCoordinate.getAbscisse(), initialCoordinate.getOrdonnée()+1);
+			newCoordinate = new Coordinate(initialCoordinate.getX(), initialCoordinate.getY() + 1);
 			break;
 		case WEST:
 			// decrement x
-			newCoordinate = new Coordinate(initialCoordinate.getAbscisse()-1, initialCoordinate.getOrdonnée());
+			newCoordinate = new Coordinate(initialCoordinate.getX() - 1, initialCoordinate.getY());
 			break;
 		case SOUTH:
 			// decrement y
-			newCoordinate = new Coordinate(initialCoordinate.getAbscisse(), initialCoordinate.getOrdonnée()-1);
+			newCoordinate = new Coordinate(initialCoordinate.getX(), initialCoordinate.getY() - 1);
 			break;
 		case EAST:
 			// increment x
-			newCoordinate = new Coordinate(initialCoordinate.getAbscisse()+1, initialCoordinate.getOrdonnée());
+			newCoordinate = new Coordinate(initialCoordinate.getX() + 1, initialCoordinate.getY());
 			break;
 		default:
 			newCoordinate = initialCoordinate;
