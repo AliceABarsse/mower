@@ -95,8 +95,8 @@ public final class MowerParams {
 					"MowerParams position string parameter cannot be parsed <<" + initialPositionString + ">>.");
 		}
 		try {
-			int xCoord = Integer.valueOf(split[0]);
-			int yCoord = Integer.valueOf(split[1]);
+			int xCoord = Integer.parseInt(split[0]);
+			int yCoord = Integer.parseInt(split[1]);
 			Coordinate coord = new Coordinate(xCoord, yCoord);
 			Orientation orientation = Orientation.fromValue(split[2]);
 

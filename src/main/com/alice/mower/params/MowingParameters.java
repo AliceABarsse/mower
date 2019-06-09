@@ -7,10 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,26 +68,18 @@ public final class MowingParameters {
 	 */
 	public void init(String filePath) {
 
-		List<String> list = new ArrayList<>();
-
-//		Path path = null;
-//		try {
-//			path = filePath == null ? Paths.get(getClass().getClassLoader().getResource("classpath:"+DEFAULT_INPUT_TXT).toURI())
-//					: Paths.get(filePath);
-//		} catch (URISyntaxException e) {
-//			throw new IllegalArgumentException("Input file " + filePath + " cannot be read:" + e.getMessage());
-//		}
-//
-//		InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(DEFAULT_INPUT_TXT);
-//		Stream<String> stream = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream(DEFAULT_INPUT_TXT))).lines();
-//		
-		try (Stream<String> stream = filePath == null ? new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream(DEFAULT_INPUT_TXT))).lines() : Files.lines(Paths.get(filePath))) {
+		List<String> list = null;
+		
+		try (InputStream systemResourceAsStream = ClassLoader.getSystemResourceAsStream(DEFAULT_INPUT_TXT);
+				InputStreamReader in = new InputStreamReader(systemResourceAsStream);
+				BufferedReader bufferedReader = new BufferedReader(in);
+				Stream<String> stream = (filePath == null ? bufferedReader.lines() : Files.lines(Paths.get(filePath)))) {
 			// limit lines read, filter empty lines
 			list = stream.limit(MAX_FILE_LINE_COUNT).filter(line -> !line.isEmpty()).collect(Collectors.toList());
 
-		} catch (IOException e) {
+		} catch (NullPointerException | IOException e) {
 			throw new IllegalArgumentException("Input file " + filePath + " cannot be read:" + e.getMessage());
-		}
+		} 
 
 		String mowerParams1 = null, mowerParams2 = null;
 		for (String line : list) {
@@ -140,8 +129,8 @@ public final class MowingParameters {
 			throw new IllegalArgumentException("Lawn info in file cannot be parsed <<" + lawnInfoString + ">>");
 		}
 		try {
-			int xCoord = Integer.valueOf(split[0]);
-			int yCoord = Integer.valueOf(split[1]);
+			int xCoord = Integer.parseInt(split[0]);
+			int yCoord = Integer.parseInt(split[1]);
 			if (xCoord > MAX_LAWN_SIZE || yCoord > MAX_LAWN_SIZE) {
 				throw new IllegalArgumentException(
 						"Lawn dimensions (" + xCoord + "," + yCoord + ") exceed maximum <<" + MAX_LAWN_SIZE + ">>");
