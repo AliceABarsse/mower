@@ -33,8 +33,12 @@ When a mower has finished, it gives the final position and orientation.
 
 **Example**  
 *input file*  
-55  
-12 N LFLFLFLFF 33 E FFRFFRFRRF  
+5 5  
+1 2 N  
+LFLFLFLFF  
+3 3 E  
+FFRFFRFRRF  
 *result*  
-13 N 51 E  
+1 3 N  
+5 1 E  
 
