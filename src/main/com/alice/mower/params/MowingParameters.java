@@ -50,7 +50,7 @@ public final class MowingParameters {
 
 	private Coordinate lawnUpperRightCorner;
 
-	private final List<MowerParams> mowerParams;
+	private final List<MowerParameters> mowerParams;
 
 	public MowingParameters() {
 		mowerParams = new ArrayList<>();
@@ -93,7 +93,7 @@ public final class MowingParameters {
 			}
 			if (mowerParams2 == null) {
 				mowerParams2 = line;
-				MowerParams mp = new MowerParams(mowerParams1, mowerParams2);
+				MowerParameters mp = new MowerParameters(mowerParams1, mowerParams2);
 				mp.validateMowerParams(lawnUpperRightCorner);
 				mowerParams.add(mp);
 
@@ -146,7 +146,7 @@ public final class MowingParameters {
 		return lawnUpperRightCorner;
 	}
 
-	public List<MowerParams> getMowerParameters() {
+	public List<MowerParameters> getMowerParameters() {
 		return mowerParams;
 	}
 

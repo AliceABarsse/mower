@@ -8,7 +8,7 @@ import java.util.List;
 import com.alice.mower.environment.Coordinate;
 import com.alice.mower.environment.Lawn;
 import com.alice.mower.environment.Position;
-import com.alice.mower.params.MowerParams;
+import com.alice.mower.params.MowerParameters;
 import com.alice.mower.params.MowingParameters;
 
 /**
@@ -21,7 +21,7 @@ public class Controller {
 
 	public static final Coordinate LAWN_UPPER_LEFT_COORDINATE = new Coordinate(5, 5);
 	private Lawn lawn;
-	private List<MowerParams> mowerParameters;
+	private List<MowerParameters> mowerParameters;
 
 	private void initLawn(Coordinate upperLeftCoords) {
 
@@ -57,13 +57,13 @@ public class Controller {
 		// initLawn(LAWN_UPPER_LEFT_COORDINATE);
 		initLawn(params.getLawnUpperRightCorner());
 		mowerParameters = params.getMowerParameters();
-		// MowerParams fixedParams1 = new MowerParams("1 2 N", "FFLRFFLR");
-		// MowerParams fixedParams2 = new MowerParams("3 3 E", "FFLRFFLR");
+		// MowerParameters fixedParams1 = new MowerParameters("1 2 N", "FFLRFFLR");
+		// MowerParameters fixedParams2 = new MowerParameters("3 3 E", "FFLRFFLR");
 
 	}
 
 	private void doTheMowing() {
-		for (MowerParams mowerParams : mowerParameters) {
+		for (MowerParameters mowerParams : mowerParameters) {
 			Mower mower = new Mower(lawn, mowerParams.getInitialPositionParam());
 			// feed the movements to the mower
 			mower.move(mowerParams.getMovementsList());

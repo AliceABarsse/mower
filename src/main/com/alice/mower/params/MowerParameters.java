@@ -8,7 +8,7 @@ import com.alice.mower.environment.Coordinate;
 import com.alice.mower.environment.Orientation;
 import com.alice.mower.environment.Position;
 
-public final class MowerParams {
+public final class MowerParameters {
 
 	private final String initialPositionString;
 	private final String movementSequenceString;
@@ -25,9 +25,9 @@ public final class MowerParams {
 	 * @throws IllegalArgumentException
 	 *             if either parameter is null
 	 */
-	public MowerParams(String initialPositionString, String movementSequenceString) {
+	public MowerParameters(String initialPositionString, String movementSequenceString) {
 		if (initialPositionString == null || movementSequenceString == null) {
-			throw new IllegalArgumentException("MowerParams constructor parameters must not be null.");
+			throw new IllegalArgumentException("MowerParameters constructor parameters must not be null.");
 		}
 		movementsList = new ArrayList<>();
 		this.initialPositionString = initialPositionString;
@@ -36,7 +36,7 @@ public final class MowerParams {
 
 	@Override
 	public String toString() {
-		return "MowerParams [initialPositionString=" + initialPositionString + ", movementSequenceString="
+		return "MowerParameters [initialPositionString=" + initialPositionString + ", movementSequenceString="
 				+ movementSequenceString + "]";
 	}
 
@@ -92,7 +92,7 @@ public final class MowerParams {
 		String[] split = initialPositionString.split(MowingParameters.LINE_INNER_SEPARATOR);
 		if (split.length < 3) {
 			throw new IllegalArgumentException(
-					"MowerParams position string parameter cannot be parsed <<" + initialPositionString + ">>.");
+					"MowerParameters position string parameter cannot be parsed <<" + initialPositionString + ">>.");
 		}
 		try {
 			int xCoord = Integer.parseInt(split[0]);
@@ -103,7 +103,7 @@ public final class MowerParams {
 			return new Position(coord, orientation);
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException(
-					"MowerParams position string parameter cannot be parsed <<" + initialPositionString + ">>.");
+					"MowerParameters position string parameter cannot be parsed <<" + initialPositionString + ">>.");
 		}
 	}
 
