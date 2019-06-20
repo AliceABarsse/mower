@@ -2,6 +2,9 @@ package com.alice.mower.params;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.alice.mower.Movement;
 import com.alice.mower.environment.Coordinate;
@@ -15,6 +18,8 @@ public final class MowerParameters {
 
 	private Position initialPositionParam;
 	private final List<Movement> movementsList;
+	
+	private static final Pattern MOWER_POSITION_INPUT_FORMAT_PATTERN = Pattern.compile("(\\d+) (\\d+) ([NEWS])");
 
 	/**
 	 * 
@@ -61,23 +66,19 @@ public final class MowerParameters {
 
 	/**
 	 * parse the string and match each character to a movement.
+	 * Ignore space characters that may have slipped in.
 	 * 
 	 * @return list of movements read from string.
 	 * @throws IllegalArgumentException
 	 *             if the string does not have expected format.
 	 */
 	private List<Movement> parseMovementSequenceStringToList() {
-		List<Movement> list = new ArrayList<>();
-
-		for (int index = 0; index < movementSequenceString.length(); index++) {
-			char charAt = movementSequenceString.charAt(index);
-			// stop at first non-alphabetic character
-			if (!Character.isAlphabetic(charAt)) {
-				break;
-			}
-			Movement movement = Movement.fromValue(charAt);
-			list.add(movement);
-		}
+		
+		List<Movement> list = movementSequenceString.chars()
+			.mapToObj(c -> (char) c)
+			.filter(charAt -> !charAt.equals(' '))
+			.map(charAt->Movement.fromValue(charAt)).collect(Collectors.toList());
+		
 		return list;
 	}
 
@@ -89,24 +90,18 @@ public final class MowerParameters {
 	 */
 	private Position parsePositionString() {
 
-		String[] split = initialPositionString.split(MowingParameters.LINE_INNER_SEPARATOR);
-		if (split.length < 3) {
-			throw new IllegalArgumentException(
-					"MowerParameters position string parameter cannot be parsed <<" + initialPositionString + ">>.");
-		}
-		try {
-			int xCoord = Integer.parseInt(split[0]);
-			int yCoord = Integer.parseInt(split[1]);
+		Matcher matcher = MOWER_POSITION_INPUT_FORMAT_PATTERN.matcher(initialPositionString);
+		if (matcher.find()) {
+			int xCoord = Integer.parseInt(matcher.group(1));
+			int yCoord = Integer.parseInt(matcher.group(2));
 			Coordinate coord = new Coordinate(xCoord, yCoord);
-			Orientation orientation = Orientation.fromValue(split[2]);
-
+			Orientation orientation = Orientation.fromValue(matcher.group(3));
 			return new Position(coord, orientation);
-		} catch (NumberFormatException e) {
-			throw new IllegalArgumentException(
-					"MowerParameters position string parameter cannot be parsed <<" + initialPositionString + ">>.");
 		}
+		throw new IllegalArgumentException(
+				"Mower initial position info cannot be parsed as with expected format (2 integers and an orientation letter separated by <<"
+						+ MowingParameters.LINE_INNER_SEPARATOR + ">>)  <<" + initialPositionString + ">>");
 	}
-
 	public Position getInitialPositionParam() {
 		return initialPositionParam;
 	}
