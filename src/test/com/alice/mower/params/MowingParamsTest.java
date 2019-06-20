@@ -54,7 +54,7 @@ public class MowingParamsTest {
 	 * Test depends on contents of default init file
 	 */
 	@Test
-	public void testValidateLawnParamNominalSquare() {
+	public void testvalidateLawnParamNominalSquare() {
 		MowingParameters params = new MowingParameters();
 		Coordinate validatedLawnCoordinate = params.validateLawnParam("4 4");
 		assertEquals(new Coordinate(4, 4), validatedLawnCoordinate);
@@ -66,7 +66,7 @@ public class MowingParamsTest {
 	 * 
 	 */
 	@Test
-	public void testValidateLawnParamNominalRectangle() {
+	public void testvalidateLawnParamNominalRectangle() {
 		MowingParameters params = new MowingParameters();
 		Coordinate validatedLawnCoordinate = params.validateLawnParam("4 6");
 		assertEquals(new Coordinate(4, 6), validatedLawnCoordinate);
@@ -79,7 +79,7 @@ public class MowingParamsTest {
 	 * Input contains bad format string, wrong separator
 	 */
 	@Test(expected = IllegalArgumentException.class)
-	public void testValidateLawnParamBadFormat() {
+	public void testvalidateLawnParamBadFormat() {
 		MowingParameters params = new MowingParameters();
 		params.validateLawnParam("4,4");
 	}
@@ -103,7 +103,7 @@ public class MowingParamsTest {
 	 * Input contains unexpected number format string
 	 */
 	@Test(expected = IllegalArgumentException.class)
-	public void testValidateLawnParamNumberFormatProblem() {
+	public void testvalidateLawnParamNumberFormatProblem() {
 		MowingParameters params = new MowingParameters();
 		params.validateLawnParam("4L 4L");
 	}
@@ -115,7 +115,7 @@ public class MowingParamsTest {
 	 * Input contains out of bounds values
 	 */
 	@Test
-	public void testValidateLawnParamOutOfBounds() {
+	public void testvalidateLawnParamOutOfBounds() {
 		MowingParameters params = new MowingParameters();
 		int testedValue = 10000;
 

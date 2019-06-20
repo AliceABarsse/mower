@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,6 +38,7 @@ public final class MowingParameters {
 
 	public static final String LINE_INNER_SEPARATOR = " ";
 	private static final String DEFAULT_INPUT_TXT = "resources/input.txt";
+	private static final Pattern LAWN_INPUT_FORMAT_PATTERN = Pattern.compile("(\\d+) (\\d+)");
 
 	/**
 	 * Limit how many lines of instructions we read, in case things get out of
@@ -124,22 +127,19 @@ public final class MowingParameters {
 	 */
 	public Coordinate validateLawnParam(String lawnInfoString) {
 
-		String[] split = lawnInfoString.split(LINE_INNER_SEPARATOR);
-		if (split.length != 2) {
-			throw new IllegalArgumentException("Lawn info in file cannot be parsed <<" + lawnInfoString + ">>");
-		}
-		try {
-			int xCoord = Integer.parseInt(split[0]);
-			int yCoord = Integer.parseInt(split[1]);
+		Matcher matcher = LAWN_INPUT_FORMAT_PATTERN.matcher(lawnInfoString);
+		if (matcher.find()) {
+			int xCoord = Integer.parseInt(matcher.group(1));
+			int yCoord = Integer.parseInt(matcher.group(2));
 			if (xCoord > MAX_LAWN_SIZE || yCoord > MAX_LAWN_SIZE) {
 				throw new IllegalArgumentException(
 						"Lawn dimensions (" + xCoord + "," + yCoord + ") exceed maximum <<" + MAX_LAWN_SIZE + ">>");
 			}
 			return new Coordinate(xCoord, yCoord);
-		} catch (NumberFormatException e) {
-			throw new IllegalArgumentException(
-					"Lawn info in file cannot be parsed as integers <<" + lawnInfoString + ">>");
 		}
+		throw new IllegalArgumentException(
+				"Lawn info in file cannot be parsed as with expected format (2 integers separated by <<"
+						+ LINE_INNER_SEPARATOR + ">>)  <<" + lawnInfoString + ">>");
 	}
 
 	public Coordinate getLawnUpperRightCorner() {
