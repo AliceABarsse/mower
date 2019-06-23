@@ -3,6 +3,8 @@
  */
 package com.alice.mower.environment;
 
+import java.util.function.Predicate;
+
 /**
  * @author alicebarsse
  * 
@@ -26,6 +28,8 @@ public final class Lawn {
 	 */
 	public static final Coordinate LOWER_LEFT_COORDINATE = new Coordinate(0, 0);
 
+	private final Predicate<Coordinate> filter;
+	
 	/**
 	 * @param upperLeftCoords
 	 *            Dimension-defining information.Must not be null.
@@ -37,6 +41,9 @@ public final class Lawn {
 			throw new IllegalArgumentException("Lawn parameter cannot be null");
 		}
 		this.upperRightCoords = upperLeftCoords;
+		
+		// playing with lambda expression
+		filter = (coord) -> !coord.isGreaterThan(upperLeftCoords) && !LOWER_LEFT_COORDINATE.isGreaterThan(coord);
 	}
 
 	/**
@@ -50,18 +57,20 @@ public final class Lawn {
 		if (coord == null) {
 			return false;
 		}
-		if (coord.isGreaterThan(upperRightCoords)) {
+		
+		if (!filter.test(coord)) {
+//		if (coord.isGreaterThan(upperRightCoords)) {
 			System.err.println("Coordinate (" + coord
 					+ ") is outside of lawn upper or right-side bounds (lawn upper-right coordinate is "
 					+ upperRightCoords + ")");
 			return false;
 		}
-		if (LOWER_LEFT_COORDINATE.isGreaterThan(coord)) {
-			System.err.println("Coordinate (" + coord
-					+ ") is outside of lawn lower or left-side bounds (lawn lower-left coordinate is "
-					+ LOWER_LEFT_COORDINATE + ")");
-			return false;
-		}
+//		if (LOWER_LEFT_COORDINATE.isGreaterThan(coord)) {
+//			System.err.println("Coordinate (" + coord
+//					+ ") is outside of lawn lower or left-side bounds (lawn lower-left coordinate is "
+//					+ LOWER_LEFT_COORDINATE + ")");
+//			return false;
+//		}
 		return true;
 	}
 }
