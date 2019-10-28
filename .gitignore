@@ -1,1 +1,4 @@
 /bin/
+.settings/
+do_not_commit.txt
+
